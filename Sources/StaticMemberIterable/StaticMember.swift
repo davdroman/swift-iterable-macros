@@ -17,6 +17,10 @@ public struct StaticMember<Container, Value>: Identifiable {
 		self.name = name
 		self.storage = value
 	}
+
+	public init(projectedValue: Self) {
+		self.init(keyPath: projectedValue.keyPath, name: projectedValue.name, value: projectedValue.value)
+	}
 }
 
 extension StaticMember: @unchecked Sendable where Value: Sendable {}
