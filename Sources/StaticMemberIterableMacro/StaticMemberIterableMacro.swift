@@ -31,6 +31,7 @@ struct StaticMemberIterableMacro: MemberMacro {
 
 		let emitter = StaticMemberEmitter(
 			access: AccessSpecifier(keyword: options.accessModifier),
+			typeAccess: AccessSpecifier(keyword: declaration.explicitAccessModifier),
 			members: members,
 			containerType: declaration.memberContainerType,
 			valueType: options.memberType ?? declaration.memberValueType
@@ -135,6 +136,7 @@ struct ConflictingMemberError: DiagnosticMessage {
 
 struct StaticMemberEmitter {
 	let access: AccessSpecifier
+	let typeAccess: AccessSpecifier
 	let members: [StaticMemberInfo]
 	let containerType: String
 	let valueType: String
@@ -152,7 +154,7 @@ struct StaticMemberEmitter {
 
 		let typealiasDecl: DeclSyntax =
 			"""
-			\(raw: access.prefix)typealias StaticMemberValue = \(raw: valueType)
+			\(raw: typeAccess.prefix)typealias StaticMemberValue = \(raw: valueType)
 			"""
 
 		let membersDecl: DeclSyntax =
@@ -267,6 +269,19 @@ extension DeclGroupSyntax {
 		memberBlock.members.contains { $0.declaresVariable(named: name) }
 	}
 
+	var explicitAccessModifier: String? {
+		if let structDecl = self.as(StructDeclSyntax.self) {
+			return structDecl.modifiers.accessModifierKeyword
+		}
+		if let enumDecl = self.as(EnumDeclSyntax.self) {
+			return enumDecl.modifiers.accessModifierKeyword
+		}
+		if let classDecl = self.as(ClassDeclSyntax.self) {
+			return classDecl.modifiers.accessModifierKeyword
+		}
+		return nil
+	}
+
 	var memberValueType: String {
 		declaredTypeName
 	}
@@ -355,6 +370,41 @@ extension MemberBlockItemSyntax {
 		}
 
 		return variable.declaredNames.contains(name)
+	}
+}
+
+extension DeclModifierListSyntax {
+	var accessModifierKeyword: String? {
+		for modifier in self {
+			if let keyword = modifier.accessKeywordText {
+				return keyword
+			}
+		}
+		return nil
+	}
+}
+
+extension DeclModifierSyntax {
+	var accessKeywordText: String? {
+		if case .keyword(let keyword) = name.tokenKind {
+			switch keyword {
+			case .public:
+				return "public"
+			case .package:
+				return "package"
+			case .internal:
+				return "internal"
+			case .fileprivate:
+				return "fileprivate"
+			case .private:
+				return "private"
+			case .open:
+				return "public"
+			default:
+				return nil
+			}
+		}
+		return nil
 	}
 }
 

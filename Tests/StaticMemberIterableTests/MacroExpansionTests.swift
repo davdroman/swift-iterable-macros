@@ -197,7 +197,7 @@ struct StaticMemberIterableMacroTests {
 					static let b = MyRecord()
 					static let c = MyRecord()
 
-					fileprivate typealias StaticMemberValue = Fixtures
+					typealias StaticMemberValue = Fixtures
 
 					fileprivate static let allStaticMembers: [StaticMember<Fixtures, Fixtures>] = [
 						StaticMember(
@@ -337,6 +337,168 @@ struct StaticMemberIterableMacroTests {
 
 	// MARK: Access control
 
+	@Test func publicTypePropagatesAliasAccess() {
+		assertMacro {
+			"""
+			@StaticMemberIterable
+			public struct Showcase {
+				public static let demo = Showcase()
+			}
+			"""
+		} expansion: {
+			#"""
+			public struct Showcase {
+				public static let demo = Showcase()
+
+				public typealias StaticMemberValue = Showcase
+
+				static let allStaticMembers: [StaticMember<Showcase, Showcase>] = [
+					StaticMember(
+						keyPath: \Showcase.Type .demo,
+						name: "demo",
+						value: demo
+					)
+				]
+			}
+			"""#
+		}
+	}
+
+	@Test func implicitInternalTypePropagatesAliasAccess() {
+		assertMacro {
+			"""
+			@StaticMemberIterable
+			struct InternalMenu {
+				static let breakfast = InternalMenu()
+			}
+			"""
+		} expansion: {
+			#"""
+			struct InternalMenu {
+				static let breakfast = InternalMenu()
+
+				typealias StaticMemberValue = InternalMenu
+
+				static let allStaticMembers: [StaticMember<InternalMenu, InternalMenu>] = [
+					StaticMember(
+						keyPath: \InternalMenu.Type .breakfast,
+						name: "breakfast",
+						value: breakfast
+					)
+				]
+			}
+			"""#
+		}
+	}
+
+	@Test func explicitInternalTypePropagatesAliasAccess() {
+		assertMacro {
+			"""
+			@StaticMemberIterable
+			internal struct ExplicitInternalMenu {
+				static let dinner = ExplicitInternalMenu()
+			}
+			"""
+		} expansion: {
+			#"""
+			internal struct ExplicitInternalMenu {
+				static let dinner = ExplicitInternalMenu()
+
+				internal typealias StaticMemberValue = ExplicitInternalMenu
+
+				static let allStaticMembers: [StaticMember<ExplicitInternalMenu, ExplicitInternalMenu>] = [
+					StaticMember(
+						keyPath: \ExplicitInternalMenu.Type .dinner,
+						name: "dinner",
+						value: dinner
+					)
+				]
+			}
+			"""#
+		}
+	}
+
+	@Test func packageTypePropagatesAliasAccess() {
+		assertMacro {
+			"""
+			@StaticMemberIterable
+			package struct PackageMenu {
+				static let special = PackageMenu()
+			}
+			"""
+		} expansion: {
+			#"""
+			package struct PackageMenu {
+				static let special = PackageMenu()
+
+				package typealias StaticMemberValue = PackageMenu
+
+				static let allStaticMembers: [StaticMember<PackageMenu, PackageMenu>] = [
+					StaticMember(
+						keyPath: \PackageMenu.Type .special,
+						name: "special",
+						value: special
+					)
+				]
+			}
+			"""#
+		}
+	}
+
+	@Test func fileprivateTypePropagatesAliasAccess() {
+		assertMacro {
+			"""
+			@StaticMemberIterable
+			fileprivate enum FileprivateMenu {
+				static let hidden = FileprivateMenu()
+			}
+			"""
+		} expansion: {
+			#"""
+			fileprivate enum FileprivateMenu {
+				static let hidden = FileprivateMenu()
+
+				fileprivate typealias StaticMemberValue = FileprivateMenu
+
+				static let allStaticMembers: [StaticMember<FileprivateMenu, FileprivateMenu>] = [
+					StaticMember(
+						keyPath: \FileprivateMenu.Type .hidden,
+						name: "hidden",
+						value: hidden
+					)
+				]
+			}
+			"""#
+		}
+	}
+
+	@Test func privateTypePropagatesAliasAccess() {
+		assertMacro {
+			"""
+			@StaticMemberIterable
+			private enum SecretMenu {
+				static let chef = SecretMenu()
+			}
+			"""
+		} expansion: {
+			#"""
+			private enum SecretMenu {
+				static let chef = SecretMenu()
+
+				private typealias StaticMemberValue = SecretMenu
+
+				static let allStaticMembers: [StaticMember<SecretMenu, SecretMenu>] = [
+					StaticMember(
+						keyPath: \SecretMenu.Type .chef,
+						name: "chef",
+						value: chef
+					)
+				]
+			}
+			"""#
+		}
+	}
+
 	@Test func publicAccess() {
 		assertMacro {
 			"""
@@ -355,7 +517,7 @@ struct StaticMemberIterableMacroTests {
 				static let espresso = Beverage()
 				static let latte = Beverage()
 
-				public typealias StaticMemberValue = Beverage
+				typealias StaticMemberValue = Beverage
 
 				public static let allStaticMembers: [StaticMember<Menu, Beverage>] = [
 					StaticMember(
@@ -389,7 +551,7 @@ struct StaticMemberIterableMacroTests {
 				static let light = Roast()
 				static let dark = Roast()
 
-				package typealias StaticMemberValue = Roast
+				typealias StaticMemberValue = Roast
 
 				package static let allStaticMembers: [StaticMember<Roast, Roast>] = [
 					StaticMember(
@@ -423,7 +585,7 @@ struct StaticMemberIterableMacroTests {
 				static let breakfast = MenuItem()
 				static let dinner = MenuItem()
 
-				private typealias StaticMemberValue = MenuItem
+				typealias StaticMemberValue = MenuItem
 
 				private static let allStaticMembers: [StaticMember<MenuItem, MenuItem>] = [
 					StaticMember(
