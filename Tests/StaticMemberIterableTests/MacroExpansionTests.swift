@@ -338,30 +338,27 @@ struct StaticMemberIterableMacroTests {
 	// MARK: Access control
 
 	@Test(arguments: [
-		("public", "public"),
-		("internal", "internal"),
-		("", "internal"),
-		("package", "package"),
-		("fileprivate", "fileprivate"),
-		("private", "private"),
+		("public ", "public "),
+		("internal ", "internal "),
+		("", ""),
+		("package ", "package "),
+		("fileprivate ", "fileprivate "),
+		("private ", "private "),
 	])
-	func typealiasPropagatesTypeAccess(typeAccess: String, expectedSemantic: String) {
-		let keywordPrefix = typeAccess.isEmpty ? "" : "\(typeAccess) "
-		let aliasPrefix = typeAccess.isEmpty ? "" : "\(expectedSemantic) "
-
+	func typealiasPropagatesTypeAccess(typeModifier: String, aliasModifier: String) {
 		assertMacro {
 			"""
 			@StaticMemberIterable
-			\(keywordPrefix)struct AccessAliasFixture {
+			\(typeModifier)struct AccessAliasFixture {
 				static let sample = AccessAliasFixture()
 			}
 			"""
 		} expansion: {
 			"""
-			\(keywordPrefix)struct AccessAliasFixture {
+			\(typeModifier)struct AccessAliasFixture {
 				static let sample = AccessAliasFixture()
 
-				\(aliasPrefix)typealias StaticMemberValue = AccessAliasFixture
+				\(aliasModifier)typealias StaticMemberValue = AccessAliasFixture
 
 				static let allStaticMembers: [StaticMember<AccessAliasFixture, AccessAliasFixture>] = [
 					StaticMember(
@@ -376,20 +373,17 @@ struct StaticMemberIterableMacroTests {
 	}
 
 	@Test(arguments: [
-		("public", "public"),
-		("internal", "internal"),
-		("", "internal"),
-		("package", "package"),
-		("fileprivate", "fileprivate"),
-		("private", "private"),
+		("(.public)", "public "),
+		("(.internal)", "internal "),
+		("", ""),
+		("(.package)", "package "),
+		("(.fileprivate)", "fileprivate "),
+		("(.private)", "private "),
 	])
-	func macroAccessSetsAllStaticMembers(macroAccess: String, expectedSemantic: String) {
-		let attribute = macroAccess.isEmpty ? "@StaticMemberIterable" : "@StaticMemberIterable(.\(macroAccess))"
-		let membersPrefix = macroAccess.isEmpty ? "" : "\(expectedSemantic) "
-
+	func macroAccessSetsAllStaticMembers(macroModifier: String, membersModifier: String) {
 		assertMacro {
 			"""
-			\(attribute)
+			@StaticMemberIterable\(macroModifier)
 			struct AccessMacroFixture {
 				static let sample = AccessMacroFixture()
 			}
@@ -401,7 +395,7 @@ struct StaticMemberIterableMacroTests {
 
 				typealias StaticMemberValue = AccessMacroFixture
 
-				\(membersPrefix)static let allStaticMembers: [StaticMember<AccessMacroFixture, AccessMacroFixture>] = [
+				\(membersModifier)static let allStaticMembers: [StaticMember<AccessMacroFixture, AccessMacroFixture>] = [
 					StaticMember(
 						keyPath: \\AccessMacroFixture.Type .sample,
 						name: "sample",
