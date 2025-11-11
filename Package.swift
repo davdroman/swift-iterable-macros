@@ -18,8 +18,6 @@ let package = Package(
 		.library(name: "CaseIterable", targets: ["CaseIterable"]),
 	],
 	targets: [
-		.target(name: "IterableSupport"),
-
 		.target(
 			name: "IterableMacros",
 			dependencies: [
@@ -81,6 +79,8 @@ let package = Package(
 				.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
 			]
 		),
+
+		.target(name: "IterableSupport"),
 	]
 )
 
