@@ -16,6 +16,26 @@ struct CaseIterableRuntimeTests {
 		case breakfast, lunch, dinner
 	}
 
+	@CaseIterable
+	@dynamicMemberLookup
+	enum Palette {
+		case sunrise
+		case midnight
+
+		struct Properties {
+			let description: String
+		}
+
+		var properties: Properties {
+			switch self {
+			case .sunrise:
+				Properties(description: "Sunrise")
+			case .midnight:
+				Properties(description: "Midnight")
+			}
+		}
+	}
+
 	@Test func caseIterableMembers() {
 		let cases = CoffeeKind.allCases
 
@@ -24,5 +44,10 @@ struct CaseIterableRuntimeTests {
 		#expect(cases.map(\.title) == ["Espresso", "Latte", "Pour Over"])
 		#expect(cases.map(\.value) == [.espresso, .latte, .pourOver])
 		#expect(cases.map(\.id) == ["espresso", "latte", "pourOver"])
+	}
+
+	@Test func dynamicMemberLookupForwardsToProperties() {
+		#expect(Palette.sunrise.description == "Sunrise")
+		#expect(Palette.midnight.description == "Midnight")
 	}
 }

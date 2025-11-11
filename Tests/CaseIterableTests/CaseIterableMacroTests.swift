@@ -205,5 +205,124 @@ enum CoffeeOrder {
 """#
 		}
 	}
+
+	// MARK: Dynamic member lookup
+
+	@Test func dynamicMemberLookupSynthesizesSubscript() {
+		assertMacro {
+			#"""
+			@dynamicMemberLookup
+			@CaseIterable
+			enum Palette {
+				case sunrise
+
+				struct Properties {}
+
+				var properties: Properties { Properties() }
+			}
+			"""#
+		} expansion: {
+			#"""
+			@dynamicMemberLookup
+			enum Palette {
+				case sunrise
+
+				struct Properties {}
+
+				var properties: Properties { Properties() }
+
+				static let allCases: [CaseOf<Palette>] = [
+					CaseOf(
+						name: "sunrise",
+						value: .sunrise
+					)
+				]
+
+				subscript <T>(dynamicMember keyPath: KeyPath<Properties, T>) -> T {
+					properties[keyPath: keyPath]
+				}
+			}
+			"""#
+		}
+	}
+
+	@Test(arguments: [
+		("public struct Properties {}", "public "),
+		("internal struct Properties {}", "internal "),
+		("struct Properties {}", ""),
+		("package struct Properties {}", "package "),
+		("fileprivate struct Properties {}", "fileprivate "),
+		("private struct Properties {}", "private "),
+	])
+	func dynamicMemberSubscriptMatchesPropertiesAccess(
+		propertiesDeclaration: String,
+		subscriptModifier: String
+	) {
+		assertMacro {
+			#"""
+			@dynamicMemberLookup
+			@CaseIterable
+			enum Palette {
+				case sunrise
+
+				\#(propertiesDeclaration)
+
+				var properties: Properties { Properties() }
+			}
+			"""#
+		} expansion: {
+			#"""
+			@dynamicMemberLookup
+			enum Palette {
+				case sunrise
+
+				\#(propertiesDeclaration)
+
+				var properties: Properties { Properties() }
+
+				static let allCases: [CaseOf<Palette>] = [
+					CaseOf(
+						name: "sunrise",
+						value: .sunrise
+					)
+				]
+
+				\#(subscriptModifier)subscript <T>(dynamicMember keyPath: KeyPath<Properties, T>) -> T {
+					properties[keyPath: keyPath]
+				}
+			}
+			"""#
+		}
+	}
+
+	@Test func dynamicMemberLookupWithoutPropertiesSkipsSubscript() {
+		assertMacro {
+			#"""
+			@dynamicMemberLookup
+			@CaseIterable
+			enum Palette {
+				case sunrise
+
+				var properties: Int { 0 }
+			}
+			"""#
+		} expansion: {
+			#"""
+			@dynamicMemberLookup
+			enum Palette {
+				case sunrise
+
+				var properties: Int { 0 }
+
+				static let allCases: [CaseOf<Palette>] = [
+					CaseOf(
+						name: "sunrise",
+						value: .sunrise
+					)
+				]
+			}
+			"""#
+		}
+	}
 }
 #endif

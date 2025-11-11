@@ -60,10 +60,13 @@ struct CaseIterableMacro: MemberMacro {
 			return []
 		}
 
+		let hasDynamicMemberLookup = enumDecl.hasDynamicMemberLookupAttribute
+
 		let emitter = CaseEmitter(
 			access: access,
 			containerType: enumDecl.declaredTypeName,
-			cases: caseElements.map(EnumCaseInfo.init)
+			cases: caseElements.map(EnumCaseInfo.init),
+			dynamicMemberAccess: hasDynamicMemberLookup ? enumDecl.propertiesStructAccessSpecifier : nil
 		)
 
 		return emitter.makeDeclarations()
@@ -130,6 +133,7 @@ struct CaseEmitter {
 	let access: AccessSpecifier
 	let containerType: String
 	let cases: [EnumCaseInfo]
+	let dynamicMemberAccess: AccessSpecifier?
 
 	static let synthesizedMemberNames = [
 		"allCases",
@@ -147,7 +151,19 @@ struct CaseEmitter {
 			]
 			"""
 
-		return [allCasesDecl]
+		var declarations: [DeclSyntax] = [allCasesDecl]
+
+		if let dynamicMemberAccess {
+			let subscriptDecl: DeclSyntax =
+				"""
+				\(raw: dynamicMemberAccess.prefix)subscript<T>(dynamicMember keyPath: KeyPath<Properties, T>) -> T {
+					properties[keyPath: keyPath]
+				}
+				"""
+			declarations.append(subscriptDecl)
+		}
+
+		return declarations
 	}
 }
 
@@ -224,6 +240,28 @@ extension EnumDeclSyntax {
 	func declaresMember(named name: String) -> Bool {
 		memberBlock.members.contains { $0.declaresVariable(named: name) }
 	}
+
+	var propertiesStructAccessSpecifier: AccessSpecifier? {
+		guard let properties = propertiesStruct else {
+			return nil
+		}
+		return AccessSpecifier(keyword: properties.modifiers.accessModifierKeyword)
+	}
+
+	var hasDynamicMemberLookupAttribute: Bool {
+		attributes.containsAttribute(named: "dynamicMemberLookup")
+	}
+
+	private var propertiesStruct: StructDeclSyntax? {
+		for member in memberBlock.members {
+			if let structDecl = member.decl.as(StructDeclSyntax.self),
+				structDecl.name.text.trimmingBackticks() == "Properties"
+			{
+				return structDecl
+			}
+		}
+		return nil
+	}
 }
 
 extension MemberBlockItemSyntax {
@@ -281,5 +319,61 @@ extension String {
 			return self
 		}
 		return String(dropFirst().dropLast())
+	}
+}
+
+extension SyntaxProtocol {
+	var trimmedDescription: String {
+		self.trimmed.description
+	}
+}
+
+extension AttributeListSyntax {
+	func containsAttribute(named name: String) -> Bool {
+		for attribute in self {
+			guard let attribute = attribute.as(AttributeSyntax.self) else {
+				continue
+			}
+
+			if attribute.attributeName.trimmedDescription == name {
+				return true
+			}
+		}
+		return false
+	}
+}
+
+extension DeclModifierListSyntax {
+	var accessModifierKeyword: String? {
+		for modifier in self {
+			if let keyword = modifier.accessKeywordText {
+				return keyword
+			}
+		}
+		return nil
+	}
+}
+
+extension DeclModifierSyntax {
+	var accessKeywordText: String? {
+		if case let .keyword(keyword) = name.tokenKind {
+			switch keyword {
+			case .public:
+				return "public"
+			case .package:
+				return "package"
+			case .internal:
+				return "internal"
+			case .fileprivate:
+				return "fileprivate"
+			case .private:
+				return "private"
+			case .open:
+				return "public"
+			default:
+				return nil
+			}
+		}
+		return nil
 	}
 }
