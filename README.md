@@ -1,6 +1,9 @@
-# StaticMemberIterable
+# swift-iterable-macros
 
-StaticMemberIterable is a Swift macro that synthesizes collections describing every `static let` defined in a struct, enum, or class.
+swift-iterable-macros hosts Swift macros that generate iterable collections for your types:
+
+- `@StaticMemberIterable` synthesizes collections describing every `static let` defined in a struct, enum, or class.
+- `@CaseIterable` mirrors Swift’s `CaseIterable` but keeps a case’s name, value, and presentation metadata.
 
 This is handy for building fixtures, demo data, menus, or anywhere you want a single source of truth for a handful of well-known static members.
 
@@ -9,14 +12,21 @@ This is handy for building fixtures, demo data, menus, or anywhere you want a si
 Add the dependency and product to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/davdroman/StaticMemberIterable", from: "0.1.0"),
+.package(url: "https://github.com/davdroman/swift-iterable-macros", from: "0.2.0"),
 ```
 
 ```swift
-.product(name: "StaticMemberIterable", package: "StaticMemberIterable"),
+.product(name: "IterableMacros", package: "swift-iterable-macros"),
 ```
 
-## Usage
+`IterableMacros` re-exports both modules. If you only need one macro, depend on it explicitly instead:
+
+```swift
+.product(name: "StaticMemberIterable", package: "swift-iterable-macros"),
+.product(name: "CaseIterable", package: "swift-iterable-macros"),
+```
+
+## Static members (`@StaticMemberIterable`)
 
 ```swift
 import StaticMemberIterable
@@ -29,7 +39,7 @@ enum ColorPalette {
     static let stardust: Color = Color(red: 0.68, green: 0.51, blue: 0.78)
 }
 
-ColorPalette.allStaticMembers.map(\.value)   // [.orange, .indigo, .purple] as [Color]
+ColorPalette.allStaticMembers.map(\.value)   // [Color(red: 1.00, ...), ...]
 ColorPalette.allStaticMembers.map(\.title)   // ["Sunrise", "Moonlight", "Stardust"]
 ColorPalette.allStaticMembers.map(\.keyPath) // [\ColorPalette.sunrise, ...] as [KeyPath<ColorPalette.Type, Color>]
 ```
@@ -40,6 +50,7 @@ Each synthesized entry is a `StaticMember<Container, Value>`: an `Identifiable` 
 
 ```swift
 ForEach(ColorPalette.allStaticMembers) { $color in
+    let color = $color.value
     RoundedRectangle(cornerRadius: 12)
         .fill(color)
         .overlay(Text($color.title))
@@ -56,6 +67,26 @@ ForEach(ColorPalette.allStaticMembers) { $color in
 
 Because it is a property wrapper, you can also project (`$member`) when you use it on your own properties, and `Identifiable` conformance makes it slot neatly into `ForEach`.
 
+## Enum cases (`@CaseIterable`)
+
+```swift
+import CaseIterable
+
+@CaseIterable
+enum MenuSection {
+    case breakfast
+    case lunch
+    case dinner
+}
+
+ForEach(MenuSection.allCases) { $section in
+    Text($section.title)
+        .tag($section.id)
+}
+```
+
+`@CaseIterable` produces an explicit `allCases: [CaseOf<Enum>]`. `CaseOf` is also a property wrapper, exposing the case name, a title-cased variant, the enum value, and a stable `id` derived from the name.
+
 ### Access control
 
 Need public-facing lists? Pass the desired access modifier:
@@ -63,6 +94,9 @@ Need public-facing lists? Pass the desired access modifier:
 ```swift
 @StaticMemberIterable(.public)
 struct Coffee { ... }
+
+@CaseIterable(.public)
+enum MenuSection { ... }
 ```
 
 Supported modifiers:

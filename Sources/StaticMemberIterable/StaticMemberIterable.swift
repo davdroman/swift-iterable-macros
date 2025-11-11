@@ -12,10 +12,10 @@ public protocol StaticMemberIterable {
 )
 public macro StaticMemberIterable(
 	_ access: StaticMemberIterableAccess? = nil,
-	ofType memberType: Any.Type? = nil
+	ofType memberType: Any.Type? = nil,
 ) = #externalMacro(
 	module: "StaticMemberIterableMacro",
-	type: "StaticMemberIterableMacro"
+	type: "StaticMemberIterableMacro",
 )
 
 public enum StaticMemberIterableAccess {

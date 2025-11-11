@@ -8,8 +8,8 @@ import Testing
 	.macros(
 		[StaticMemberIterableMacro.self],
 		indentationWidth: .tab,
-		record: .missing
-	)
+		record: .missing,
+	),
 )
 struct StaticMemberIterableMacroTests {
 	// MARK: Successful expansions

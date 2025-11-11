@@ -11,7 +11,7 @@ struct StaticMemberTitleTests {
 		StaticMember(
 			keyPath: \Fixture.Type.reference,
 			name: name,
-			value: Fixture.reference
+			value: Fixture.reference,
 		)
 	}
 

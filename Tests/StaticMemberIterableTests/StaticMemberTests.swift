@@ -11,13 +11,13 @@ struct StaticMemberPatternMatchingTests {
 	private let alphaMember = StaticMember(
 		keyPath: \Fixture.Type.alpha,
 		name: "alpha",
-		value: Fixture.alpha
+		value: Fixture.alpha,
 	)
 
 	private let betaMember = StaticMember(
 		keyPath: \Fixture.Type.beta,
 		name: "beta",
-		value: Fixture.beta
+		value: Fixture.beta,
 	)
 
 	@Test func keyPathPatternMatchesMember() {

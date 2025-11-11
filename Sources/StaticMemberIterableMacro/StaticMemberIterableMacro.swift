@@ -8,7 +8,7 @@ struct StaticMemberIterableMacro: MemberMacro {
 		of node: AttributeSyntax,
 		providingMembersOf declaration: some DeclGroupSyntax,
 		conformingTo protocols: [TypeSyntax],
-		in context: some MacroExpansionContext
+		in context: some MacroExpansionContext,
 	) throws -> [DeclSyntax] {
 		let options = AttributeOptions(attribute: node)
 
@@ -16,7 +16,7 @@ struct StaticMemberIterableMacro: MemberMacro {
 			throw DiagnosticsError(
 				diagnostics: [
 					Diagnostic(node: Syntax(node), message: NotATypeError()),
-				]
+				],
 			)
 		}
 
@@ -24,7 +24,7 @@ struct StaticMemberIterableMacro: MemberMacro {
 
 		guard !members.isEmpty else {
 			context.diagnose(
-				Diagnostic(node: Syntax(node), message: NoStaticMembersWarning())
+				Diagnostic(node: Syntax(node), message: NoStaticMembersWarning()),
 			)
 			return []
 		}
@@ -34,7 +34,7 @@ struct StaticMemberIterableMacro: MemberMacro {
 			typeAccess: AccessSpecifier(keyword: declaration.explicitAccessModifier),
 			members: members,
 			containerType: declaration.memberContainerType,
-			valueType: options.memberType ?? declaration.memberValueType
+			valueType: options.memberType ?? declaration.memberValueType,
 		)
 
 		let conflicts = StaticMemberEmitter.synthesizedMemberNames
@@ -44,7 +44,7 @@ struct StaticMemberIterableMacro: MemberMacro {
 			throw DiagnosticsError(
 				diagnostics: conflicts.map {
 					Diagnostic(node: Syntax(node), message: ConflictingMemberError(memberName: $0))
-				}
+				},
 			)
 		}
 
@@ -58,7 +58,7 @@ extension StaticMemberIterableMacro: ExtensionMacro {
 		attachedTo declaration: some DeclGroupSyntax,
 		providingExtensionsOf type: some TypeSyntaxProtocol,
 		conformingTo protocols: [TypeSyntax],
-		in context: some MacroExpansionContext
+		in context: some MacroExpansionContext,
 	) throws -> [ExtensionDeclSyntax] {
 		if protocols.isEmpty {
 			return []
@@ -68,7 +68,7 @@ extension StaticMemberIterableMacro: ExtensionMacro {
 			throw DiagnosticsError(
 				diagnostics: [
 					Diagnostic(node: Syntax(node), message: NotATypeError()),
-				]
+				],
 			)
 		}
 

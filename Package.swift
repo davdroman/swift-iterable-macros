@@ -4,7 +4,7 @@ import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
-	name: "StaticMemberIterable",
+	name: "swift-iterable-macros",
 	platforms: [
 		.iOS(.v13),
 		.macOS(.v10_15),
@@ -13,17 +13,49 @@ let package = Package(
 		.watchOS(.v6),
 	],
 	products: [
+		.library(name: "IterableMacros", targets: ["IterableMacros"]),
 		.library(name: "StaticMemberIterable", targets: ["StaticMemberIterable"]),
+		.library(name: "CaseIterable", targets: ["CaseIterable"]),
 	],
 	targets: [
-		.target(name: "StaticMemberIterable", dependencies: ["StaticMemberIterableMacro"]),
+		.target(
+			name: "IterableMacros",
+			dependencies: [
+				"StaticMemberIterable",
+				"CaseIterable",
+			],
+		),
+
+		.target(
+			name: "StaticMemberIterable",
+			dependencies: [
+				"IterableSupport",
+				"StaticMemberIterableMacro",
+			],
+		),
+
+		.target(
+			name: "CaseIterable",
+			dependencies: [
+				"IterableSupport",
+				"CaseIterableMacro",
+			],
+		),
 
 		.macro(
 			name: "StaticMemberIterableMacro",
 			dependencies: [
 				.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
 				.product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-			]
+			],
+		),
+
+		.macro(
+			name: "CaseIterableMacro",
+			dependencies: [
+				.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+				.product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+			],
 		),
 
 		.testTarget(
@@ -35,9 +67,23 @@ let package = Package(
 				// For some reason, with Swift Syntax prebuilts enabled, we need to depend on SwiftCompilerPlugin here to work around error:
 				// Compilation search paths unable to resolve module dependency: 'SwiftCompilerPlugin'
 				.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-			]
+			],
 		),
-	]
+
+		.testTarget(
+			name: "CaseIterableTests",
+			dependencies: [
+				"CaseIterable",
+				"CaseIterableMacro",
+				.product(name: "MacroTesting", package: "swift-macro-testing"),
+				// For some reason, with Swift Syntax prebuilts enabled, we need to depend on SwiftCompilerPlugin here to work around error:
+				// Compilation search paths unable to resolve module dependency: 'SwiftCompilerPlugin'
+				.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+			],
+		),
+
+		.target(name: "IterableSupport"),
+	],
 )
 
 package.dependencies += [
