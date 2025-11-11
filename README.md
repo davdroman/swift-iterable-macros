@@ -41,8 +41,8 @@ Each synthesized entry is a `StaticMember<Container, Value>`: an `Identifiable` 
 ```swift
 ForEach(ColorPalette.allStaticMembers) { $color in
     RoundedRectangle(cornerRadius: 12)
-        .fill(color.value)
-        .overlay(Text(color.title))
+        .fill(color)
+        .overlay(Text($color.title))
         .tag($color.id)
 }
 ```
