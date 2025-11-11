@@ -4,7 +4,7 @@ import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
-	name: "StaticMemberIterable",
+	name: "swift-iterable-macros",
 	platforms: [
 		.iOS(.v13),
 		.macOS(.v10_15),
@@ -16,7 +16,10 @@ let package = Package(
 		.library(name: "StaticMemberIterable", targets: ["StaticMemberIterable"]),
 	],
 	targets: [
-		.target(name: "StaticMemberIterable", dependencies: ["StaticMemberIterableMacro"]),
+		.target(
+			name: "StaticMemberIterable",
+			dependencies: ["StaticMemberIterableMacro"]
+		),
 
 		.macro(
 			name: "StaticMemberIterableMacro",

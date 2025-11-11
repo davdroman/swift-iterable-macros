@@ -1,6 +1,6 @@
-# StaticMemberIterable
+# swift-iterable-macros
 
-StaticMemberIterable is a Swift macro that synthesizes collections describing every `static let` defined in a struct, enum, or class.
+swift-iterable-macros hosts Swift macros that generate iterable collections for your types. Today it ships `@StaticMemberIterable`, which synthesizes collections describing every `static let` defined in a struct, enum, or class.
 
 This is handy for building fixtures, demo data, menus, or anywhere you want a single source of truth for a handful of well-known static members.
 
@@ -9,11 +9,11 @@ This is handy for building fixtures, demo data, menus, or anywhere you want a si
 Add the dependency and product to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/davdroman/StaticMemberIterable", from: "0.1.0"),
+.package(url: "https://github.com/davdroman/swift-iterable-macros", from: "0.2.0"),
 ```
 
 ```swift
-.product(name: "StaticMemberIterable", package: "StaticMemberIterable"),
+.product(name: "StaticMemberIterable", package: "swift-iterable-macros"),
 ```
 
 ## Usage
@@ -40,6 +40,7 @@ Each synthesized entry is a `StaticMember<Container, Value>`: an `Identifiable` 
 
 ```swift
 ForEach(ColorPalette.allStaticMembers) { $color in
+    let color = $color.value
     RoundedRectangle(cornerRadius: 12)
         .fill(color)
         .overlay(Text($color.title))
