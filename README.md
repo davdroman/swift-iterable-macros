@@ -16,6 +16,12 @@ Add the dependency and product to your `Package.swift`:
 ```
 
 ```swift
+.product(name: "IterableMacros", package: "swift-iterable-macros"),
+```
+
+`IterableMacros` re-exports both modules. If you only need one macro, depend on it explicitly instead:
+
+```swift
 .product(name: "StaticMemberIterable", package: "swift-iterable-macros"),
 .product(name: "CaseIterable", package: "swift-iterable-macros"),
 ```

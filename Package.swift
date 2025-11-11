@@ -13,11 +13,20 @@ let package = Package(
 		.watchOS(.v6),
 	],
 	products: [
+		.library(name: "IterableMacros", targets: ["IterableMacros"]),
 		.library(name: "StaticMemberIterable", targets: ["StaticMemberIterable"]),
 		.library(name: "CaseIterable", targets: ["CaseIterable"]),
 	],
 	targets: [
 		.target(name: "IterableSupport"),
+
+		.target(
+			name: "IterableMacros",
+			dependencies: [
+				"StaticMemberIterable",
+				"CaseIterable",
+			]
+		),
 
 		.target(
 			name: "StaticMemberIterable",
