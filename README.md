@@ -1,6 +1,9 @@
 # swift-iterable-macros
 
-swift-iterable-macros hosts Swift macros that generate iterable collections for your types. Today it ships `@StaticMemberIterable`, which synthesizes collections describing every `static let` defined in a struct, enum, or class.
+swift-iterable-macros hosts Swift macros that generate iterable collections for your types:
+
+- `@StaticMemberIterable` synthesizes collections describing every `static let` defined in a struct, enum, or class.
+- `@CaseIterable` mirrors Swift’s `CaseIterable` but keeps a case’s name, value, and presentation metadata.
 
 This is handy for building fixtures, demo data, menus, or anywhere you want a single source of truth for a handful of well-known static members.
 
@@ -14,9 +17,10 @@ Add the dependency and product to your `Package.swift`:
 
 ```swift
 .product(name: "StaticMemberIterable", package: "swift-iterable-macros"),
+.product(name: "CaseIterable", package: "swift-iterable-macros"),
 ```
 
-## Usage
+## Static members (`@StaticMemberIterable`)
 
 ```swift
 import StaticMemberIterable
@@ -57,6 +61,26 @@ ForEach(ColorPalette.allStaticMembers) { $color in
 
 Because it is a property wrapper, you can also project (`$member`) when you use it on your own properties, and `Identifiable` conformance makes it slot neatly into `ForEach`.
 
+## Enum cases (`@CaseIterable`)
+
+```swift
+import CaseIterable
+
+@CaseIterable
+enum MenuSection {
+    case breakfast
+    case lunch
+    case dinner
+}
+
+ForEach(MenuSection.allCases) { $section in
+    Text($section.title)
+        .tag($section.id)
+}
+```
+
+`@CaseIterable` produces an explicit `allCases: [CaseOf<Enum>]`. `CaseOf` is also a property wrapper, exposing the case name, a title-cased variant, the enum value, and a stable `id` derived from the name.
+
 ### Access control
 
 Need public-facing lists? Pass the desired access modifier:
@@ -64,6 +88,9 @@ Need public-facing lists? Pass the desired access modifier:
 ```swift
 @StaticMemberIterable(.public)
 struct Coffee { ... }
+
+@CaseIterable(.public)
+enum MenuSection { ... }
 ```
 
 Supported modifiers:

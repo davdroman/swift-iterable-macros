@@ -1,3 +1,4 @@
+import CaseIterable
 import StaticMemberIterable
 import Testing
 
@@ -74,6 +75,20 @@ struct StaticMemberIterableTests {
 		}
 	}
 
+	@CaseIterable
+	enum CoffeeKind: Equatable {
+		case espresso
+		case latte
+		case pourOver
+	}
+
+	@CaseIterable(.public)
+	enum MenuSection {
+		case breakfast
+		case lunch
+		case dinner
+	}
+
 	// Tests
 
 	@Test func coffeeMembers() throws {
@@ -147,5 +162,15 @@ struct StaticMemberIterableTests {
 
 		#expect(coffeeMembers.count == 3)
 		#expect(beverageMembers.map(\.value.name) == ["sparkling", "still"])
+	}
+
+	@Test func caseIterableMembers() {
+		let cases = CoffeeKind.allCases
+
+		#expect(cases.count == 3)
+		#expect(cases.map(\.name) == ["espresso", "latte", "pourOver"])
+		#expect(cases.map(\.title) == ["Espresso", "Latte", "Pour Over"])
+		#expect(cases.map(\.value) == [.espresso, .latte, .pourOver])
+		#expect(cases.map(\.id) == ["espresso", "latte", "pourOver"])
 	}
 }
