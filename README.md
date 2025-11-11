@@ -71,21 +71,45 @@ Because it is a property wrapper, you can also project (`$member`) when you use 
 
 ```swift
 import CaseIterable
+import SwiftUI
 
 @CaseIterable
-enum MenuSection {
-    case breakfast
-    case lunch
-    case dinner
+@dynamicMemberLookup
+enum CoffeeMenu {
+    case espresso
+    case cortado
+    case flatWhite
+
+    struct Properties {
+        let emoji: String
+        let price: Double
+    }
+
+    var properties: Properties {
+        switch self {
+        case .espresso:
+            Properties(emoji: "☕️", price: 2.50)
+        case .cortado:
+            Properties(emoji: "🥛", price: 3.20)
+        case .flatWhite:
+            Properties(emoji: "🌿", price: 3.80)
+        }
+    }
 }
 
-ForEach(MenuSection.allCases) { $section in
-    Text($section.title)
-        .tag($section.id)
+List {
+    ForEach(CoffeeMenu.allCases) { $coffee in
+        HStack {
+            Text("\(coffee.emoji) \($coffee.title)")
+            Spacer()
+            Text(coffee.price, format: .currency(code: "USD"))
+        }
+        .tag($coffee.id)
+    }
 }
 ```
 
-`@CaseIterable` produces an explicit `allCases: [CaseOf<Enum>]`. `CaseOf` is also a property wrapper, exposing the case name, a title-cased variant, the enum value, and a stable `id` derived from the name.
+`@CaseIterable` produces an explicit `allCases: [CaseOf<Enum>]`. Each entry remains a property wrapper (`CaseOf`) so you keep the friendly title, stable `id`, and the underlying case value for driving pickers or lists. When you combine the macro with `@dynamicMemberLookup` plus a nested `struct Properties`, the generated dynamic-member subscript forwards through `properties`, letting you ask every case for details such as `emoji` and `price` above.
 
 ### Access control
 
