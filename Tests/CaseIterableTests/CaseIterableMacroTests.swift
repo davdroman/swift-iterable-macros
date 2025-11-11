@@ -23,7 +23,7 @@ struct CaseIterableMacroTests {
 			}
 			"""
 		} expansion: {
-			#"""
+			"""
 			enum Beverage {
 				case still
 				case sparkling
@@ -44,7 +44,7 @@ struct CaseIterableMacroTests {
 					)
 				]
 			}
-			"""#
+			"""
 		}
 	}
 
@@ -58,7 +58,7 @@ struct CaseIterableMacroTests {
 			}
 			"""
 		} expansion: {
-			#"""
+			"""
 			enum Meal {
 				case breakfast, lunch
 				case dinner
@@ -78,7 +78,7 @@ struct CaseIterableMacroTests {
 					)
 				]
 			}
-			"""#
+			"""
 		}
 	}
 
@@ -92,7 +92,7 @@ struct CaseIterableMacroTests {
 			}
 			"""
 		} expansion: {
-			#"""
+			"""
 			enum Flavor: String {
 				case vanilla = "vanilla"
 				case chocolate = "chocolate"
@@ -108,7 +108,7 @@ struct CaseIterableMacroTests {
 					)
 				]
 			}
-			"""#
+			"""
 		}
 	}
 
@@ -210,7 +210,7 @@ struct CaseIterableMacroTests {
 
 	@Test func dynamicMemberLookupSynthesizesSubscript() {
 		assertMacro {
-			#"""
+			"""
 			@dynamicMemberLookup
 			@CaseIterable
 			enum Palette {
@@ -220,9 +220,9 @@ struct CaseIterableMacroTests {
 
 				var properties: Properties { Properties() }
 			}
-			"""#
+			"""
 		} expansion: {
-			#"""
+			"""
 			@dynamicMemberLookup
 			enum Palette {
 				case sunrise
@@ -242,7 +242,7 @@ struct CaseIterableMacroTests {
 					properties[keyPath: keyPath]
 				}
 			}
-			"""#
+			"""
 		}
 	}
 
@@ -287,7 +287,7 @@ struct CaseIterableMacroTests {
 
 	@Test func dynamicMemberLookupWithoutPropertiesSkipsSubscript() {
 		assertMacro {
-			#"""
+			"""
 			@dynamicMemberLookup
 			@CaseIterable
 			enum Palette {
@@ -295,9 +295,9 @@ struct CaseIterableMacroTests {
 
 				var properties: Int { 0 }
 			}
-			"""#
+			"""
 		} expansion: {
-			#"""
+			"""
 			@dynamicMemberLookup
 			enum Palette {
 				case sunrise
@@ -311,7 +311,7 @@ struct CaseIterableMacroTests {
 					)
 				]
 			}
-			"""#
+			"""
 		}
 	}
 }
