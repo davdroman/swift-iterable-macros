@@ -12,7 +12,7 @@ public struct StaticMember<Container, Value>: Identifiable {
 	private let storage: Value
 
 	public var wrappedValue: Value { storage }
-	public var projectedValue: StaticMember { self }
+	public var projectedValue: StaticMember<Container, Value> { self }
 	public var value: Value { storage }
 	public var title: String { name.memberIdentifierTitle() }
 	public var id: ID { keyPath }
@@ -23,11 +23,14 @@ public struct StaticMember<Container, Value>: Identifiable {
 		self.storage = value
 	}
 
-	public init(projectedValue: Self) {
+	public init(projectedValue: StaticMember<Container, Value>) {
 		self.init(keyPath: projectedValue.keyPath, name: projectedValue.name, value: projectedValue.value)
 	}
 
-	public static func ~= (keyPath: ID, staticMember: StaticMember) -> Bool {
+	public static func ~= (
+		keyPath: ID,
+		staticMember: StaticMember<Container, Value>
+	) -> Bool {
 		staticMember.keyPath == keyPath
 	}
 }
