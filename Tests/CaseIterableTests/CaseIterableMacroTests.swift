@@ -194,15 +194,15 @@ struct CaseIterableMacroTests {
 			}
 			"""
 		} diagnostics: {
-#"""
-@CaseIterable
-enum CoffeeOrder {
-	case espresso
-	case latte(size: Int)
-      ┬───────────────
-      ╰─ 🛑 '@CaseIterable' does not support cases with associated values ('latte')
-}
-"""#
+			"""
+			@CaseIterable
+			enum CoffeeOrder {
+				case espresso
+				case latte(size: Int)
+			      ┬───────────────
+			      ╰─ 🛑 '@CaseIterable' does not support cases with associated values ('latte')
+			}
+			"""
 		}
 	}
 
