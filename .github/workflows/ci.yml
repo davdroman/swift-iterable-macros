@@ -75,4 +75,6 @@ jobs:
         uses: skiptools/swift-android-action@v2
         with:
           swift-version: ${{ matrix.swift }}
+          build-tests: false
+          run-tests: false
           free-disk-space: true
