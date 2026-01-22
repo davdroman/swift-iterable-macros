@@ -1,10 +1,10 @@
-# swift-iterable-macros
+# IterableMacros
 
-[![CI](https://github.com/davdroman/swift-iterable-macros/actions/workflows/ci.yml/badge.svg)](https://github.com/davdroman/swift-iterable-macros/actions/workflows/ci.yml)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdavdroman%2Fswift-iterable-macros%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/davdroman/swift-iterable-macros)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdavdroman%2Fswift-iterable-macros%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/davdroman/swift-iterable-macros)
+[![CI](https://github.com/davdroman/IterableMacros/actions/workflows/ci.yml/badge.svg)](https://github.com/davdroman/IterableMacros/actions/workflows/ci.yml)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdavdroman%2FIterableMacros%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/davdroman/IterableMacros)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdavdroman%2FIterableMacros%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/davdroman/IterableMacros)
 
-swift-iterable-macros hosts Swift macros that generate iterable collections for your types:
+IterableMacros hosts Swift macros that generate iterable collections for your types:
 
 - `@StaticMemberIterable` synthesizes collections describing every `static let` defined in a struct, enum, class, or extension.
 - `@CaseIterable` mirrors Swift’s `CaseIterable` but keeps a case’s name, value, and presentation metadata.
@@ -16,18 +16,18 @@ This is handy for building fixtures, demo data, menus, or anywhere you want a si
 Add the dependency and product to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/davdroman/swift-iterable-macros", from: "0.3.0"),
+.package(url: "https://github.com/davdroman/IterableMacros", from: "0.3.0"),
 ```
 
 ```swift
-.product(name: "IterableMacros", package: "swift-iterable-macros"),
+.product(name: "IterableMacros", package: "IterableMacros"),
 ```
 
 `IterableMacros` re-exports both modules. If you only need one macro, depend on it explicitly instead:
 
 ```swift
-.product(name: "StaticMemberIterable", package: "swift-iterable-macros"),
-.product(name: "CaseIterable", package: "swift-iterable-macros"),
+.product(name: "StaticMemberIterable", package: "IterableMacros"),
+.product(name: "CaseIterable", package: "IterableMacros"),
 ```
 
 ## Static members (`@StaticMemberIterable`)

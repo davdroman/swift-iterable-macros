@@ -4,7 +4,7 @@ import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
-	name: "swift-iterable-macros",
+	name: "IterableMacros",
 	platforms: [
 		.iOS(.v13),
 		.macOS(.v10_15),
