@@ -16,7 +16,7 @@ This is handy for building fixtures, demo data, menus, or anywhere you want a si
 Add the dependency and product to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/davdroman/swift-iterable-macros", from: "0.2.0"),
+.package(url: "https://github.com/davdroman/swift-iterable-macros", from: "0.3.0"),
 ```
 
 ```swift
