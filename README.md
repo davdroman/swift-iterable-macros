@@ -6,7 +6,7 @@
 
 swift-iterable-macros hosts Swift macros that generate iterable collections for your types:
 
-- `@StaticMemberIterable` synthesizes collections describing every `static let` defined in a struct, enum, or class.
+- `@StaticMemberIterable` synthesizes collections describing every `static let` defined in a struct, enum, class, or extension.
 - `@CaseIterable` mirrors Swift’s `CaseIterable` but keeps a case’s name, value, and presentation metadata.
 
 This is handy for building fixtures, demo data, menus, or anywhere you want a single source of truth for a handful of well-known static members.
