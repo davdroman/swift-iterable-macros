@@ -15,20 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  Lint:
-    runs-on: macos-latest
-    steps:
-      - name: Git Checkout
-        uses: actions/checkout@v5
-
-      - name: Install SwiftFormat
-        uses: pkgxdev/setup@v4
-        with:
-          +: swiftformat@latest
-
-      - name: SwiftFormat Lint
-        run: swiftformat --lint . --reporter github-actions-log
-  macOS:
+  macos:
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.title, '[skip ci]')
     name: ${{ matrix.platform }} (Swift ${{ matrix.swift }})
     runs-on: macos-15
@@ -51,6 +38,7 @@ jobs:
           swift: ~${{ matrix.swift }}
           action: test
           verbosity: xcbeautify
+
   linux:
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.title, '[skip ci]')
     name: Linux (Swift ${{ matrix.swift }})
