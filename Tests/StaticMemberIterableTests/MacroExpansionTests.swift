@@ -335,6 +335,117 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
+	@Test func extensionWithOfType() {
+		assertMacro {
+			"""
+			struct Easing {}
+
+			@StaticMemberIterable(ofType: Easing.self)
+			extension Easing {
+				static let linear = Easing()
+				static let easeIn = Easing()
+			}
+			"""
+		} expansion: {
+			#"""
+			struct Easing {}
+			extension Easing {
+				static let linear = Easing()
+				static let easeIn = Easing()
+
+				typealias StaticMemberValue = Easing
+
+				static let allStaticMembers: [StaticMember<Easing, Easing>] = [
+					StaticMember(
+						keyPath: \Easing.Type .linear,
+						name: "linear",
+						value: linear
+					),
+					StaticMember(
+						keyPath: \Easing.Type .easeIn,
+						name: "easeIn",
+						value: easeIn
+					)
+				]
+			}
+			"""#
+		}
+	}
+
+	@Test func extensionWithoutOfType() {
+		assertMacro {
+			"""
+			struct Animation {}
+
+			@StaticMemberIterable
+			extension Animation {
+				static let fade = Animation()
+				static let slide = Animation()
+			}
+			"""
+		} expansion: {
+			#"""
+			struct Animation {}
+			extension Animation {
+				static let fade = Animation()
+				static let slide = Animation()
+
+				typealias StaticMemberValue = Animation
+
+				static let allStaticMembers: [StaticMember<Animation, Animation>] = [
+					StaticMember(
+						keyPath: \Animation.Type .fade,
+						name: "fade",
+						value: fade
+					),
+					StaticMember(
+						keyPath: \Animation.Type .slide,
+						name: "slide",
+						value: slide
+					)
+				]
+			}
+			"""#
+		}
+	}
+
+	@Test func extensionWithAccessControl() {
+		assertMacro {
+			"""
+			struct Timing {}
+
+			@StaticMemberIterable(.public)
+			public extension Timing {
+				static let instant = Timing()
+				static let delayed = Timing()
+			}
+			"""
+		} expansion: {
+			#"""
+			struct Timing {}
+			public extension Timing {
+				static let instant = Timing()
+				static let delayed = Timing()
+
+				public typealias StaticMemberValue = Timing
+
+				public static let allStaticMembers: [StaticMember<Timing, Timing>] = [
+					StaticMember(
+						keyPath: \Timing.Type .instant,
+						name: "instant",
+						value: instant
+					),
+					StaticMember(
+						keyPath: \Timing.Type .delayed,
+						name: "delayed",
+						value: delayed
+					)
+				]
+			}
+			"""#
+		}
+	}
+
 	// MARK: Access control
 
 	@Test(arguments: [
@@ -445,7 +556,7 @@ struct StaticMemberIterableMacroTests {
 			"""
 			@StaticMemberIterable
 			┬────────────────────
-			╰─ 🛑 `StaticMemberIterable` works on a `class`, `enum`, or `struct`
+			╰─ 🛑 `StaticMemberIterable` works on a `class`, `enum`, `struct`, or `extension`
 			actor RoastLogger {}
 			"""
 		}

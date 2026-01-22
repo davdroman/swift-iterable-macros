@@ -96,7 +96,7 @@ extension StaticMemberIterableMacro: ExtensionMacro {
 
 struct NotATypeError: DiagnosticMessage {
 	var message: String {
-		"`StaticMemberIterable` works on a `class`, `enum`, or `struct`"
+		"`StaticMemberIterable` works on a `class`, `enum`, `struct`, or `extension`"
 	}
 
 	var diagnosticID: MessageID {
@@ -258,7 +258,10 @@ extension ExprSyntax {
 
 extension DeclGroupSyntax {
 	var isSupportedType: Bool {
-		self.is(StructDeclSyntax.self) || self.is(EnumDeclSyntax.self) || self.is(ClassDeclSyntax.self)
+		self.is(StructDeclSyntax.self) ||
+		self.is(EnumDeclSyntax.self) ||
+		self.is(ClassDeclSyntax.self) ||
+		self.is(ExtensionDeclSyntax.self)
 	}
 
 	var staticMembers: [StaticMemberInfo] {
@@ -278,6 +281,9 @@ extension DeclGroupSyntax {
 		}
 		if let classDecl = self.as(ClassDeclSyntax.self) {
 			return classDecl.modifiers.accessModifierKeyword
+		}
+		if let extensionDecl = self.as(ExtensionDeclSyntax.self) {
+			return extensionDecl.modifiers.accessModifierKeyword
 		}
 		return nil
 	}
@@ -299,6 +305,9 @@ extension DeclGroupSyntax {
 		}
 		if let classDecl = self.as(ClassDeclSyntax.self) {
 			return classDecl.declaredTypeName
+		}
+		if let extensionDecl = self.as(ExtensionDeclSyntax.self) {
+			return extensionDecl.extendedType.trimmedDescription
 		}
 		return "Self"
 	}
