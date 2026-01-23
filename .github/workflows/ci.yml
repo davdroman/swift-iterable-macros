@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  macos:
+  apple:
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.title, '[skip ci]')
     name: ${{ matrix.platform }} (Swift ${{ matrix.swift }})
     runs-on: macos-15
@@ -23,7 +23,11 @@ jobs:
       fail-fast: false
       matrix:
         platform:
+          - iOS
           - macOS
+          - tvOS
+          - visionOS
+          - watchOS
         swift:
           - "6.1"
           - "6.2"
