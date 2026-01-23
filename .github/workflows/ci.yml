@@ -24,6 +24,7 @@ jobs:
       matrix:
         platform:
           - iOS
+          - mac-catalyst
           - macOS
           - tvOS
           - visionOS
@@ -34,6 +35,26 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v5
+
+      - name: Select Xcode version
+        uses: mxcl/xcodebuild@v3
+        with:
+          swift: ~${{ matrix.swift }}
+          action: none
+          verbosity: xcbeautify
+
+      - name: Disable SwiftSyntax Prebuilts
+        run: |
+          defaults write com.apple.dt.Xcode IDEPackageEnablePrebuilts -bool NO
+
+          # nuke cache to ensure it takes effect
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/Library/Developer/Xcode/SourcePackages
+          rm -rf ~/Library/Caches/org.swift.swiftpm
+
+      - if: ${{ matrix.platform != 'macOS' && matrix.platform != 'mac-catalyst' }}
+        name: Download Default Runtime
+        run: xcodebuild -downloadPlatform ${{ matrix.platform }}
 
       - name: Run Tests
         uses: mxcl/xcodebuild@v3
