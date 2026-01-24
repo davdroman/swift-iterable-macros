@@ -1,7 +1,6 @@
 #if canImport(StaticMemberIterableMacro)
 import MacroTesting
 import Testing
-
 @testable import StaticMemberIterableMacro
 
 @Suite(

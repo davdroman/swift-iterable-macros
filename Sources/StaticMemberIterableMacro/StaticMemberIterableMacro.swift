@@ -259,9 +259,9 @@ extension ExprSyntax {
 extension DeclGroupSyntax {
 	var isSupportedType: Bool {
 		self.is(StructDeclSyntax.self) ||
-		self.is(EnumDeclSyntax.self) ||
-		self.is(ClassDeclSyntax.self) ||
-		self.is(ExtensionDeclSyntax.self)
+			self.is(EnumDeclSyntax.self) ||
+			self.is(ClassDeclSyntax.self) ||
+			self.is(ExtensionDeclSyntax.self)
 	}
 
 	var staticMembers: [StaticMemberInfo] {
