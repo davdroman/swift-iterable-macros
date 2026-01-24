@@ -254,8 +254,9 @@ extension EnumDeclSyntax {
 
 	private var propertiesStruct: StructDeclSyntax? {
 		for member in memberBlock.members {
-			if let structDecl = member.decl.as(StructDeclSyntax.self),
-			   structDecl.name.text.trimmingBackticks() == "Properties"
+			if
+				let structDecl = member.decl.as(StructDeclSyntax.self),
+				structDecl.name.text.trimmingBackticks() == "Properties"
 			{
 				return structDecl
 			}
