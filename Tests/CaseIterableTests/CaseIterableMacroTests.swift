@@ -2,7 +2,6 @@
 import MacroTesting
 import SwiftSyntax
 import Testing
-
 @testable import CaseIterableMacro
 
 @Suite(
