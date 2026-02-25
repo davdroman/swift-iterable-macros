@@ -34,7 +34,7 @@ jobs:
   apple:
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.title, '[skip ci]')
     name: ${{ matrix.platform }} (Swift ${{ matrix.swift }})
-    runs-on: macos-15
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
@@ -48,6 +48,11 @@ jobs:
         swift:
           - "6.1"
           - "6.2"
+        include:
+          - swift: "6.1"
+            runner: macos-15
+          - swift: "6.2"
+            runner: macos-26
     steps:
       - name: Git Checkout
         uses: actions/checkout@v5
@@ -98,8 +103,13 @@ jobs:
         swift:
           - "6.1"
           - "6.2"
+        include:
+          - swift: "6.1"
+            image: swift:6.1
+          - swift: "6.2"
+            image: swiftlang/swift:nightly-6.2-jammy # swift:6.2 is stuck on 6.2.1, missing SwiftCompilerPlugin fix
     container:
-      image: swift:${{ matrix.swift }}
+      image: ${{ matrix.image }}
     steps:
       - name: Git Checkout
         uses: actions/checkout@v5
@@ -139,5 +149,5 @@ jobs:
         uses: davdroman/swift-macro-compatibility-check@from-version
         with:
           run-tests: false
-          from-version: "600.0.0"
+          from-version: "601.0.0"
           major-versions-only: true

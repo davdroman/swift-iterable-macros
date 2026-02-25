@@ -1,5 +1,7 @@
 #if canImport(StaticMemberIterableMacro)
 import MacroTesting
+import SnapshotTesting
+import SwiftSyntax
 import Testing
 @testable import StaticMemberIterableMacro
 
