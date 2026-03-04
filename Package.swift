@@ -65,7 +65,6 @@ let package = Package(
 				"StaticMemberIterable",
 				"StaticMemberIterableMacro",
 				.product(name: "MacroTesting", package: "swift-macro-testing"),
-				.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
 			],
 		),
 
@@ -75,7 +74,6 @@ let package = Package(
 				"CaseIterable",
 				"CaseIterableMacro",
 				.product(name: "MacroTesting", package: "swift-macro-testing"),
-				.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
 			],
 		),
 
