@@ -76,7 +76,7 @@ struct StaticMemberIterableTests {
 
 	// Tests
 
-	@Test func coffeeMembers() throws {
+	@Test func `coffee members`() throws {
 		let members = Coffee.allStaticMembers
 
 		#expect(members.count == 3)
@@ -89,7 +89,7 @@ struct StaticMemberIterableTests {
 		#expect(Coffee.self[keyPath: sunrise.keyPath].name == sunrise.value.name)
 	}
 
-	@Test func multiBindingRuntime() {
+	@Test func `multiple bindings at runtime`() {
 		let members = Menu.allStaticMembers
 
 		#expect(members.count == 2)
@@ -98,14 +98,14 @@ struct StaticMemberIterableTests {
 		#expect(members.map(\.value) == [Menu.sunrise, Menu.sunset])
 	}
 
-	@Test func customMemberTypeRuntime() {
+	@Test func `custom member type runtime`() {
 		let members = BeverageFixtures.allStaticMembers
 
 		#expect(members.map(\.name) == ["sparkling", "still"])
 		#expect(members.map(\.value) == [Beverage(name: "sparkling"), Beverage(name: "still")])
 	}
 
-	@Test func existentialMemberTypeRuntime() {
+	@Test func `existential member type runtime`() {
 		let members = ExistentialBeverageFixtures.allStaticMembers
 
 		#expect(members.count == 2)
@@ -114,7 +114,7 @@ struct StaticMemberIterableTests {
 		#expect(members.map(\.value.name) == members.map(\.name))
 	}
 
-	@Test func reservedIdentifiers() {
+	@Test func `reserved identifiers`() {
 		let members = ReservedNames.allStaticMembers
 
 		#expect(members.count == 2)
@@ -123,7 +123,7 @@ struct StaticMemberIterableTests {
 		#expect(members.map(\.value) == [ReservedNames.`class`, ReservedNames.plain])
 	}
 
-	@Test func ignoresNonLetMembers() {
+	@Test func `ignores non-let members`() {
 		let members = Laboratory.allStaticMembers
 
 		#expect(members.count == 2)
@@ -132,7 +132,7 @@ struct StaticMemberIterableTests {
 		#expect(members.map(\.value) == [Laboratory.alpha, Laboratory.beta])
 	}
 
-	@Test func classInheritanceRuntime() {
+	@Test func `class inheritance runtime`() {
 		let members = MockDrink.allStaticMembers
 
 		#expect(members.count == 2)
@@ -141,7 +141,7 @@ struct StaticMemberIterableTests {
 		#expect(members.map(\.value) == [MockDrink.water, MockDrink.soda])
 	}
 
-	@Test func staticMemberIterableConformance() {
+	@Test func `StaticMemberIterable conformance`() {
 		let coffeeMembers: [StaticMemberOf<Coffee>] = Coffee.allStaticMembers
 		let beverageMembers: [StaticMemberOf<BeverageFixtures>] = BeverageFixtures.allStaticMembers
 

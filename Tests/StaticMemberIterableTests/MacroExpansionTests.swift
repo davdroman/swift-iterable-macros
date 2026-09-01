@@ -1,9 +1,9 @@
 #if canImport(StaticMemberIterableMacro)
 import MacroTesting
 import SnapshotTesting
+@testable import StaticMemberIterableMacro
 import SwiftSyntax
 import Testing
-@testable import StaticMemberIterableMacro
 
 @Suite(
 	.macros(
@@ -15,7 +15,7 @@ import Testing
 struct StaticMemberIterableMacroTests {
 	// MARK: Successful expansions
 
-	@Test func defaultAccessInternal() {
+	@Test func `default access is internal`() {
 		assertMacro {
 			"""
 			@StaticMemberIterable
@@ -62,7 +62,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func multiBindingStaticLets() {
+	@Test func `multiple static let bindings`() {
 		assertMacro {
 			"""
 			@StaticMemberIterable
@@ -101,7 +101,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func staticVarIgnored() {
+	@Test func `static var is ignored`() {
 		assertMacro {
 			"""
 			@StaticMemberIterable
@@ -137,7 +137,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func escapedIdentifiers() {
+	@Test func `escaped identifiers`() {
 		assertMacro {
 			"""
 			@StaticMemberIterable
@@ -178,7 +178,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func nestedTypes() {
+	@Test func `nested types`() {
 		assertMacro {
 			"""
 			struct MyRecord {
@@ -223,7 +223,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func classInheritance() {
+	@Test func `class inheritance`() {
 		assertMacro {
 			"""
 			class Drink {}
@@ -260,7 +260,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func customMemberType() {
+	@Test func `custom member type`() {
 		assertMacro {
 			"""
 			struct Drink {}
@@ -297,7 +297,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func existentialMemberType() {
+	@Test func `existential member type`() {
 		assertMacro {
 			"""
 			protocol Beverage {}
@@ -336,7 +336,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func extensionWithOfType() {
+	@Test func `extension with ofType`() {
 		assertMacro {
 			"""
 			struct Easing {}
@@ -373,7 +373,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func extensionWithoutOfType() {
+	@Test func `extension without ofType`() {
 		assertMacro {
 			"""
 			struct Animation {}
@@ -410,7 +410,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func extensionWithAccessControl() {
+	@Test func `extension with access control`() {
 		assertMacro {
 			"""
 			struct Timing {}
@@ -457,7 +457,7 @@ struct StaticMemberIterableMacroTests {
 		("fileprivate ", "fileprivate "),
 		("private ", "private "),
 	])
-	func typealiasPropagatesTypeAccess(typeModifier: String, aliasModifier: String) {
+	func `typealias propagates type access level`(typeModifier: String, aliasModifier: String) {
 		assertMacro {
 			"""
 			@StaticMemberIterable
@@ -492,7 +492,7 @@ struct StaticMemberIterableMacroTests {
 		("(.fileprivate)", "fileprivate "),
 		("(.private)", "private "),
 	])
-	func macroAccessSetsAllStaticMembers(macroModifier: String, membersModifier: String) {
+	func `macro access level applies to allStaticMembers`(macroModifier: String, membersModifier: String) {
 		assertMacro {
 			"""
 			@StaticMemberIterable\(macroModifier)
@@ -521,7 +521,7 @@ struct StaticMemberIterableMacroTests {
 
 	// MARK: Diagnostics
 
-	@Test func noStaticMembersWarning() {
+	@Test func `no static members warning`() {
 		assertMacro {
 			"""
 			@StaticMemberIterable
@@ -547,7 +547,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func notATypeError() {
+	@Test func `not a type error`() {
 		assertMacro {
 			"""
 			@StaticMemberIterable
@@ -563,7 +563,7 @@ struct StaticMemberIterableMacroTests {
 		}
 	}
 
-	@Test func conflictingMembersError() {
+	@Test func `conflicting members error`() {
 		assertMacro {
 			"""
 			@StaticMemberIterable

@@ -1,9 +1,9 @@
 #if canImport(CaseIterableMacro)
+@testable import CaseIterableMacro
 import MacroTesting
 import SnapshotTesting
 import SwiftSyntax
 import Testing
-@testable import CaseIterableMacro
 
 @Suite(
 	.macros(
@@ -13,7 +13,7 @@ import Testing
 	),
 )
 struct CaseIterableMacroTests {
-	@Test func defaultAccessInternal() {
+	@Test func `default access is internal`() {
 		assertMacro {
 			"""
 			@CaseIterable
@@ -49,7 +49,7 @@ struct CaseIterableMacroTests {
 		}
 	}
 
-	@Test func multiCaseDeclarations() {
+	@Test func `multiple case declarations`() {
 		assertMacro {
 			"""
 			@CaseIterable
@@ -83,7 +83,7 @@ struct CaseIterableMacroTests {
 		}
 	}
 
-	@Test func rawValueCases() {
+	@Test func `raw value cases`() {
 		assertMacro {
 			"""
 			@CaseIterable
@@ -123,7 +123,7 @@ struct CaseIterableMacroTests {
 		("(.fileprivate)", "fileprivate "),
 		("(.private)", "private "),
 	])
-	func macroAccessSetsAllCases(macroModifier: String, membersModifier: String) {
+	func `macro access level applies to allCases`(macroModifier: String, membersModifier: String) {
 		assertMacro {
 			"""
 			@CaseIterable\(macroModifier)
@@ -149,7 +149,7 @@ struct CaseIterableMacroTests {
 
 	// MARK: Diagnostics
 
-	@Test func notAnEnumError() {
+	@Test func `not an enum error`() {
 		assertMacro {
 			"""
 			@CaseIterable
@@ -165,7 +165,7 @@ struct CaseIterableMacroTests {
 		}
 	}
 
-	@Test func noEnumCasesWarning() {
+	@Test func `no enum cases warning`() {
 		assertMacro {
 			"""
 			@CaseIterable
@@ -185,7 +185,7 @@ struct CaseIterableMacroTests {
 		}
 	}
 
-	@Test func associatedValueCaseError() {
+	@Test func `associated value case error`() {
 		assertMacro {
 			"""
 			@CaseIterable
@@ -209,7 +209,7 @@ struct CaseIterableMacroTests {
 
 	// MARK: Dynamic member lookup
 
-	@Test func dynamicMemberLookupSynthesizesSubscript() {
+	@Test func `dynamic member lookup synthesizes subscript`() {
 		assertMacro {
 			"""
 			@dynamicMemberLookup
@@ -248,7 +248,7 @@ struct CaseIterableMacroTests {
 	}
 
 	@Test(arguments: ["public ", "internal ", "", "package ", "fileprivate ", "private "])
-	func dynamicMemberSubscriptMatchesPropertiesAccess(accessLevel: String) {
+	func `dynamic member subscript matches access level of Properties`(accessLevel: String) {
 		assertMacro {
 			"""
 			@dynamicMemberLookup
@@ -286,7 +286,7 @@ struct CaseIterableMacroTests {
 		}
 	}
 
-	@Test func dynamicMemberLookupWithoutPropertiesSkipsSubscript() {
+	@Test func `dynamic member lookup without properties skips subscript`() {
 		assertMacro {
 			"""
 			@dynamicMemberLookup
