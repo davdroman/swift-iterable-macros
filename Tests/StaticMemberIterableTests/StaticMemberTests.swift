@@ -20,7 +20,7 @@ struct StaticMemberPatternMatchingTests {
 		value: Fixture.beta,
 	)
 
-	@Test func keyPathPatternMatchesMember() {
+	@Test func `key path pattern matches member`() {
 		let members = [alphaMember, betaMember]
 		var matched: [KeyPath<Fixture.Type, Fixture>] = []
 

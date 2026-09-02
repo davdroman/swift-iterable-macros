@@ -36,7 +36,7 @@ struct CaseIterableRuntimeTests {
 		}
 	}
 
-	@Test func caseIterableMembers() {
+	@Test func `CaseIterable members`() {
 		let cases = CoffeeKind.allCases
 
 		#expect(cases.count == 3)
@@ -46,7 +46,7 @@ struct CaseIterableRuntimeTests {
 		#expect(cases.map(\.id) == ["espresso", "latte", "pourOver"])
 	}
 
-	@Test func dynamicMemberLookupForwardsToProperties() {
+	@Test func `dynamic member lookup forwards to properties`() {
 		#expect(Palette.sunrise.description == "Sunrise")
 		#expect(Palette.midnight.description == "Midnight")
 	}

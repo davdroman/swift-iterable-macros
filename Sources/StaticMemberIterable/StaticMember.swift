@@ -30,7 +30,7 @@ public struct StaticMember<Container, Value>: Identifiable {
 
 	public static func ~= (
 		keyPath: ID,
-		staticMember: StaticMember<Container, Value>
+		staticMember: StaticMember<Container, Value>,
 	) -> Bool {
 		staticMember.keyPath == keyPath
 	}

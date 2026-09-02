@@ -15,44 +15,44 @@ struct StaticMemberTitleTests {
 		)
 	}
 
-	@Test func camelCaseToTitle() {
+	@Test func `camel case to title`() {
 		let member = makeMember(name: "moonlightLatte")
 		#expect(member.name == "moonlightLatte")
 		#expect(member.title == "Moonlight Latte")
 	}
 
-	@Test func preservesAcronyms() {
+	@Test func `preserves acronyms`() {
 		let member = makeMember(name: "URLSessionLogger")
 		#expect(member.title == "URL Session Logger")
 	}
 
-	@Test func handlesSeparatorsAndNumbers() {
+	@Test func `handles separators and numbers`() {
 		let member = makeMember(name: "iced_latteV2")
 		#expect(member.name == "iced_latteV2")
 		#expect(member.title == "Iced Latte V2")
 	}
 
-	@Test func acronymsAndSeparators() {
+	@Test func `acronyms and separators`() {
 		let member = makeMember(name: "httpURLParser")
 		#expect(member.title == "Http URL Parser")
 	}
 
-	@Test func mixedSeparators() {
+	@Test func `mixed separators`() {
 		let member = makeMember(name: "iced_latteV2-pro")
 		#expect(member.title == "Iced Latte V2 Pro")
 	}
 
-	@Test func lowercaseAndUppercaseWords() {
+	@Test func `lowercase and uppercase words`() {
 		#expect(makeMember(name: "sunrise").title == "Sunrise")
 		#expect(makeMember(name: "API").title == "API")
 	}
 
-	@Test func unicodeLetters() {
+	@Test func `unicode letters`() {
 		let member = makeMember(name: "mañanaBlend")
 		#expect(member.title == "Mañana Blend")
 	}
 
-	@Test func emptyString() {
+	@Test func `empty string`() {
 		let member = makeMember(name: "")
 		#expect(member.title == "")
 	}
