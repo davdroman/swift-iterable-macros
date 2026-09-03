@@ -4,7 +4,8 @@ public protocol StaticMemberIterable {
 
 @attached(
 	member,
-	names: named(StaticMemberValue), named(allStaticMembers)
+	names: named(StaticMemberValue),
+	named(allStaticMembers)
 )
 @attached(
 	extension,

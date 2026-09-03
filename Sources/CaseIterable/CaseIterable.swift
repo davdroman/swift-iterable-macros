@@ -1,6 +1,7 @@
 @attached(
 	member,
-	names: named(allCases), named(subscript(dynamicMember:))
+	names: named(allCases),
+	named(subscript(dynamicMember:))
 )
 public macro CaseIterable(
 	_ access: CaseIterableAccess? = nil,

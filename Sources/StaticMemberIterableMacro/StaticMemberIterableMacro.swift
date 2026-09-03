@@ -368,10 +368,11 @@ extension MemberBlockItemSyntax {
 			return []
 		}
 
-		return variable.bindings.compactMap {
-			$0.pattern.as(IdentifierPatternSyntax.self)?.identifier
-		}
-		.map(StaticMemberInfo.init(identifier:))
+		return variable.bindings
+			.compactMap {
+				$0.pattern.as(IdentifierPatternSyntax.self)?.identifier
+			}
+			.map(StaticMemberInfo.init(identifier:))
 	}
 
 	func declaresVariable(named name: String) -> Bool {
