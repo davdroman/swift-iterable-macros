@@ -274,9 +274,7 @@ extension MemberBlockItemSyntax {
 			return []
 		}
 
-		return enumCase.elements.compactMap { element in
-			element.parameterClause == nil ? element : nil
-		}
+		return enumCase.elements.compactMap { element in element.parameterClause == nil ? element : nil }
 	}
 
 	var associatedValueEnumCaseElements: [EnumCaseElementSyntax] {
@@ -286,9 +284,7 @@ extension MemberBlockItemSyntax {
 			return []
 		}
 
-		return enumCase.elements.compactMap { element in
-			element.parameterClause == nil ? nil : element
-		}
+		return enumCase.elements.compactMap { element in element.parameterClause == nil ? nil : element }
 	}
 
 	func declaresVariable(named name: String) -> Bool {
@@ -302,9 +298,7 @@ extension MemberBlockItemSyntax {
 
 extension VariableDeclSyntax {
 	var declaredNames: [String] {
-		bindings.compactMap {
-			$0.pattern.as(IdentifierPatternSyntax.self)?.identifier.text.trimmingBackticks()
-		}
+		bindings.compactMap { $0.pattern.as(IdentifierPatternSyntax.self)?.identifier.text.trimmingBackticks() }
 	}
 }
 
